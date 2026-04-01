@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- 
+    The meta tags and links below are essential for:
+    1. Responsive design (viewport)
+    2. SEO (description)
+    3. Styling (main.css)
+    4. External integrations (Axios for API calls)
+  -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up — QuantiMeasure</title>
+  <meta name="description" content="Create your QuantiMeasure account — smart quantity measurement and conversion platform."/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <!-- Axios: Used for all promise-based HTTP requests to our .NET Backend -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="auth-page">
+
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <main class="auth-card" id="signup-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon" aria-hidden="true">📐</div>
+      <span class="auth-logo-text">QuantiMeasure</span>
+    </div>
+
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-subtitle">Join QuantiMeasure to start measuring smarter.</p>
+
+    <div class="alert alert-error" id="signup-alert" role="alert">
+      <span class="alert-icon">⚠️</span>
+      <span id="signup-alert-msg">Something went wrong.</span>
+    </div>
+
+    <div class="alert alert-success hidden" id="signup-success" role="alert">
+      <span class="alert-icon">✅</span>
+      <span>Account created! Redirecting to login…</span>
+    </div>
+
+    <!-- Google Login -->
+    <div id="btn-google-signup" style="margin-bottom: 1.5rem; min-height: 44px; display: flex; justify-content: center;"></div>
+
+    <div class="divider">or register with email</div>
+
+    <!-- Signup Form -->
+    <form id="signup-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="signup-username">Username</label>
+        <div class="input-wrap">
+          <input
+            class="form-input"
+            type="text"
+            id="signup-username"
+            name="username"
+            placeholder="choose_a_username"
+            autocomplete="username"
+            required
+            minlength="3"
+            maxlength="100"
+          />
+          <span class="input-icon" aria-hidden="true">👤</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signup-password">Password</label>
+        <div class="input-wrap">
+          <input
+            class="form-input"
+            type="password"
+            id="signup-password"
+            name="password"
+            placeholder="min. 6 characters"
+            autocomplete="new-password"
+            required
+            minlength="6"
+          />
+          <span class="input-icon" aria-hidden="true">🔒</span>
+          <button class="input-toggle" type="button" id="toggle-signup-pw" aria-label="Toggle password visibility">👁️</button>
+        </div>
+        <!-- Password strength indicator -->
+        <div class="strength-bar" id="strength-bar" aria-label="Password strength">
+          <span id="s1"></span>
+          <span id="s2"></span>
+          <span id="s3"></span>
+          <span id="s4"></span>
+        </div>
+        <span class="strength-label" id="strength-label"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signup-confirm">Confirm Password</label>
+        <div class="input-wrap">
+          <input
+            class="form-input"
+            type="password"
+            id="signup-confirm"
+            name="confirmPassword"
+            placeholder="repeat your password"
+            autocomplete="new-password"
+            required
+          />
+          <span class="input-icon" aria-hidden="true">🔑</span>
+          <button class="input-toggle" type="button" id="toggle-confirm-pw" aria-label="Toggle confirm password visibility">👁️</button>
+        </div>
+      </div>
+
+      <label class="checkbox-wrap" for="accept-terms">
+        <input type="checkbox" id="accept-terms" name="terms" required/>
+        <span class="checkbox-custom"></span>
+        I agree to the <a href="#" style="color:var(--clr-primary);">Terms &amp; Privacy</a>
+      </label>
+
+      <button class="btn btn-primary" type="submit" id="btn-signup">
+        <span class="btn-text">Create Account</span>
+        <span class="spinner hidden" id="signup-spinner" aria-label="Loading"></span>
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account? <a href="index.html" id="link-login">Sign in →</a>
+    </p>
+  </main>
+
+  <!-- 
+    Script Loading Order:
+    1. api.js must load first as it contains the AuthService and QuantityService classes used by others.
+    2. auth.js contains the page-specific logic for handling form submissions and Google OAuth callbacks.
+  -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

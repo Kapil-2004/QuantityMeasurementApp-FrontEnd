@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- 
+    The meta tags and links below are essential for:
+    1. Responsive design (viewport)
+    2. SEO (description)
+    3. Global styling (main.css)
+    4. Dashboard-specific components and layout (dashboard.css)
+    5. External integrations (Axios for API calls)
+  -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — QuantiMeasure</title>
+  <meta name="description" content="QuantiMeasure Dashboard — Compare, convert and compute quantities with ease."/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <!-- Axios: Used for all promise-based HTTP requests to our .NET Backend -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="dashboard-bg">
+
+  <!-- Background -->
+  <div class="orb orb-1" style="opacity:0.1" aria-hidden="true"></div>
+  <div class="orb orb-2" style="opacity:0.08" aria-hidden="true"></div>
+
+  <!-- Toast container -->
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <div class="app-shell">
+    <!-- ══ TOP NAVIGATION ══════════════════════════════════ -->
+    <header class="topnav" role="banner">
+      <a class="topnav-brand" href="dashboard.html" aria-label="QuantiMeasure home">
+        <div class="topnav-brand-icon" aria-hidden="true">📐</div>
+        <span class="topnav-brand-text">QuantiMeasure</span>
+      </a>
+
+      <nav class="topnav-right" aria-label="User actions">
+        <div class="user-pill" id="user-pill" aria-label="Logged in user">
+          <div class="user-avatar" id="user-avatar" aria-hidden="true">U</div>
+          <span id="username-display">User</span>
+        </div>
+        <button class="btn-logout" id="btn-logout" type="button" aria-label="Logout">
+          🚪 Logout
+        </button>
+      </nav>
+    </header>
+
+    <!-- ══ MAIN ████████████████████████████████████████████ -->
+    <main class="main-content" id="main-content">
+
+      <!-- ── LEFT: Measurement Panel ── -->
+      <section class="measurement-panel" aria-label="Measurement operations">
+
+        <!-- Stats Row -->
+        <div class="stats-row" id="stats-row">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-label">Total Ops</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-session">0</div>
+            <div class="stat-label">Session</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-type">—</div>
+            <div class="stat-label">Active Type</div>
+          </div>
+        </div>
+
+        <!-- Measurement Type Selector -->
+        <div class="glass-card">
+          <p class="section-label">Choose Type</p>
+          <div class="type-grid" id="type-grid" role="radiogroup" aria-label="Measurement type">
+            <button class="type-card active" data-type="Length"      role="radio" aria-checked="true"  aria-label="Length">
+              <span class="type-icon">📏</span>
+              <span class="type-name">Length</span>
+            </button>
+            <button class="type-card"        data-type="Weight"      role="radio" aria-checked="false" aria-label="Weight">
+              <span class="type-icon">⚖️</span>
+              <span class="type-name">Weight</span>
+            </button>
+            <button class="type-card"        data-type="Temperature" role="radio" aria-checked="false" aria-label="Temperature">
+              <span class="type-icon">🌡️</span>
+              <span class="type-name">Temperature</span>
+            </button>
+            <button class="type-card"        data-type="Volume"      role="radio" aria-checked="false" aria-label="Volume">
+              <span class="type-icon">🧪</span>
+              <span class="type-name">Volume</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Tabs -->
+        <div class="glass-card">
+          <p class="section-label">Choose Action</p>
+          <div class="action-tabs" role="tablist" aria-label="Operation type" id="action-tabs">
+            <button class="action-tab active" data-action="compare"   role="tab" aria-selected="true"  id="tab-compare">Compare</button>
+            <button class="action-tab"        data-action="convert"   role="tab" aria-selected="false" id="tab-convert">Convert</button>
+            <button class="action-tab"        data-action="add"       role="tab" aria-selected="false" id="tab-add">Add</button>
+            <button class="action-tab"        data-action="subtract"  role="tab" aria-selected="false" id="tab-subtract">Subtract</button>
+            <button class="action-tab"        data-action="divide"    role="tab" aria-selected="false" id="tab-divide">Divide</button>
+          </div>
+        </div>
+
+        <!-- Operation Form Card -->
+        <div class="glass-card" id="form-card">
+          <!-- Temperature limitation notice -->
+          <div class="temp-note hidden" id="temp-note" role="note">
+            ⚠️ Temperature only supports <strong>Compare</strong> and <strong>Convert</strong> operations.
+          </div>
+
+          <!-- Dynamic form injected by JS -->
+          <form id="operation-form" novalidate>
+            <div id="form-fields">
+              <!-- Populated by dashboard.js -->
+            </div>
+
+            <!-- Result -->
+            <div class="result-card" id="result-card" role="status" aria-live="polite">
+              <span class="result-label" id="result-label">Result</span>
+              <span class="result-value" id="result-value">—</span>
+              <span class="result-unit"  id="result-unit"></span>
+            </div>
+
+            <button class="btn-calculate" type="submit" id="btn-calculate" aria-label="Calculate">
+              <span class="btn-text" id="calc-btn-text">⚡ Calculate</span>
+              <span class="spinner hidden btn-loader" id="calc-spinner" aria-label="Calculating…"></span>
+            </button>
+          </form>
+        </div>
+
+      </section>
+
+      <!-- ── RIGHT: History Panel ── -->
+      <aside class="history-panel" aria-label="Operation history">
+        <div class="glass-card" style="flex:1; display:flex; flex-direction:column; gap:1rem;">
+          <div class="history-header">
+            <h2 class="history-title">History</h2>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <span class="history-count" id="history-count">0</span>
+              <button class="btn-clear-history" id="btn-clear" type="button" aria-label="Refresh history">🔄 Refresh</button>
+            </div>
+          </div>
+
+          <div class="history-scroll" id="history-scroll" role="list">
+            <div class="history-empty" id="history-empty" role="listitem">
+              <span class="history-empty-icon">📋</span>
+              <p>No operations yet</p>
+              <p>Perform a calculation to see your history.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+  <!-- 
+    Script Loading Order:
+    1. api.js must load first as it contains the AuthService and QuantityService classes used by others.
+    2. dashboard.js contains the core application controller (DashboardApp) and UI management.
+  -->
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
