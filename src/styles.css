@@ -1,0 +1,169 @@
+/* =========================================
+   GLOBAL DESIGN SYSTEM — Angular App
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Deep space palette for a premium, modern feel */
+  --clr-bg:           #0a0f1e;
+  --clr-surface:      #111827;
+  --clr-surface-2:    #1a2340;
+  --clr-border:       rgba(255,255,255,0.08);
+  --clr-primary:      #4f7cff;
+  --clr-primary-dark: #3b64e0;
+  --clr-accent:       #7c5cfc;
+  --clr-success:      #22d3a5;
+  --clr-warning:      #f59e0b;
+  --clr-danger:       #ef4444;
+  --clr-text:         #f1f5f9;
+  --clr-text-muted:   #94a3b8;
+  --clr-text-dim:     #475569;
+  --clr-glass:        rgba(255,255,255,0.05);
+  --clr-glass-hover:  rgba(255,255,255,0.10);
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+
+  --shadow-glow: 0 0 40px rgba(79,124,255,0.15);
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+
+  --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; height: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(ellipse 60% 50% at 10% 20%, rgba(79,124,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(124,92,252,0.07) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Utilities */
+.hidden  { display: none !important; }
+.sr-only { position: absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
+/* Layout Grid */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Glass Card */
+.glass-card {
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+.glass-card:hover { border-color: rgba(255,255,255,0.12); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(79,124,255,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(79,124,255,0.45);
+}
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Inputs / Form Elements */
+.dash-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--clr-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+.dash-input, .dash-select, .form-input {
+  width: 100%;
+  background: var(--clr-glass);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 1rem;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--clr-text);
+  outline: none;
+  transition: var(--transition);
+}
+.dash-select {
+  font-size: 0.875rem;
+  padding-right: 2rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+.dash-input:focus, .dash-select:focus, .form-input:focus {
+  border-color: var(--clr-primary);
+  background: rgba(79,124,255,0.05);
+  box-shadow: 0 0 0 3px rgba(79,124,255,0.12);
+}
+.dash-select option { background: var(--clr-surface); color: var(--clr-text); }
+
+dialog {
+    margin: auto;
+    border: none;
+    background: transparent;
+    overflow: visible;
+}
+dialog::backdrop {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+}

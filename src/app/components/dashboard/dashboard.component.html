@@ -1,0 +1,106 @@
+<div class="dashboard-grid">
+  <!-- Left Column: Forms -->
+  <div class="calculator-panel glass-card">
+    <div class="type-header" style="margin-bottom: 1rem;">
+      <h2 style="font-weight: 800; font-size: 1.5rem;">{{ activeType }} Calculator</h2>
+    </div>
+
+    <!-- Action Tabs -->
+    <div class="action-tabs">
+      <button 
+        *ngFor="let act of availableActions" 
+        class="action-tab" 
+        [disabled]="act.disabled"
+        [class.active]="action === act.id"
+        (click)="setAction(act.id)">
+        {{ act.label }}
+      </button>
+    </div>
+
+    <!-- Operation Form -->
+    <form (ngSubmit)="onCalculate()" style="margin-top: 1.5rem;">
+      <div *ngIf="action === 'convert'; else binaryForm">
+        <div class="form-row">
+          <div class="field-group">
+            <span class="dash-label">FROM</span>
+            <input type="number" class="dash-input" [(ngModel)]="q1.Value" name="q1Val" required step="any">
+            <select class="dash-select" [(ngModel)]="q1.Unit" name="q1Unit">
+              <option *ngFor="let u of units" [value]="u">{{u}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="convert-arrow" style="text-align: center; margin: 1rem 0; color: var(--clr-text-dim);">↓ Convert To</div>
+        <div class="form-row">
+          <div class="field-group">
+             <span class="dash-label">TARGET UNIT</span>
+             <select class="dash-select" [(ngModel)]="targetUnit" name="tUnit">
+                <option *ngFor="let u of units" [value]="u">{{u}}</option>
+             </select>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #binaryForm>
+        <div class="form-row three-col" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: end;">
+          <div class="field-group">
+            <span class="dash-label">FROM</span>
+            <input type="number" class="dash-input" [(ngModel)]="q1.Value" name="q1Val" required step="any">
+            <select class="dash-select" [(ngModel)]="q1.Unit" name="q1Unit">
+              <option *ngFor="let u of units" [value]="u">{{u}}</option>
+            </select>
+          </div>
+          
+          <div class="op-symbol" style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; margin-bottom: 2px;">{{ getActionSymbol() }}</div>
+          
+          <div class="field-group">
+            <span class="dash-label">TO</span>
+            <input type="number" class="dash-input" [(ngModel)]="q2.Value" name="q2Val" required step="any">
+            <select class="dash-select" [(ngModel)]="q2.Unit" name="q2Unit">
+              <option *ngFor="let u of units" [value]="u">{{u}}</option>
+            </select>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Result Card -->
+      <div class="result-card mt-4" [ngClass]="resultType" [class.show]="resultLabel" style="margin-top: 1.5rem; display: none; background: rgba(17,24,39,0.7); border: 1px solid var(--clr-border); border-left: 4px solid var(--clr-primary); border-radius: var(--radius-md); padding: 1.2rem 1.5rem; flex-direction: column; gap: 0.3rem;">
+        <span class="result-label" style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--clr-text-dim);">{{ resultLabel }}</span>
+        <div class="result-value" style="font-size: 2rem; font-weight: 800; line-height: 1.1;">{{ resultValue }}</div>
+        <div class="result-unit" *ngIf="resultUnit" style="font-size: 0.9rem; color: var(--clr-text-muted);">{{ resultUnit }}</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 0.85rem;" [disabled]="loading">
+        {{ loading ? 'Calculating...' : '⚡ Calculate' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Right Column: History -->
+  <div class="history-panel glass-card">
+    <div class="history-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h3 class="history-title" style="font-size: 1rem; font-weight: 700;">Recent History</h3>
+      <button class="btn btn-history-sync" style="background: transparent; border: 1px solid var(--clr-border); padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: var(--radius-sm); color: var(--clr-text-dim); cursor: pointer;" (click)="loadRemoteHistory()">Sync ☁️</button>
+    </div>
+
+    <div class="history-scroll" style="max-height: 400px; overflow-y: auto;" *ngIf="history.length > 0; else noHistory">
+      <div class="history-item" *ngFor="let item of history" style="background: var(--clr-glass); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 0.6rem;">
+        <div class="history-item-top" style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+          <span class="history-op-badge" style="font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; background: rgba(79,124,255,0.15); color: var(--clr-primary); text-transform: uppercase; line-height: 1">{{ item.action }}</span>
+          <span class="history-time" style="font-size: 0.68rem; color: var(--clr-text-dim);">{{ item.timestamp | date:'shortTime' }}</span>
+        </div>
+        <div class="history-desc" style="font-size: 0.8rem; color: var(--clr-text-muted);">
+           <span *ngIf="item.action === 'convert'">{{ item.q1?.Value }} {{ item.q1?.Unit }} → {{ item.targetUnit }}</span>
+           <span *ngIf="item.action !== 'convert'">{{ item.q1?.Value }} {{ item.q1?.Unit }} vs {{ item.q2?.Value }} {{ item.q2?.Unit }}</span>
+        </div>
+        <div class="history-result" *ngIf="item.resultText" style="font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem;">{{ item.resultText }}</div>
+      </div>
+    </div>
+    
+    <ng-template #noHistory>
+      <div class="history-empty" style="text-align: center; padding: 2rem; color: var(--clr-text-dim);">
+        <div style="font-size: 2rem; opacity: 0.5;">📜</div>
+        <p>No operations yet.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

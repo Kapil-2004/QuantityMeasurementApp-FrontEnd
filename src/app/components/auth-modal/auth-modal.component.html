@@ -1,0 +1,50 @@
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="auth-card" (click)="$event.stopPropagation()">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🔒</div>
+      <span class="auth-logo-text">QuantiMeasure</span>
+    </div>
+    <h2 class="auth-title">{{ isLogin ? 'Welcome Back' : 'Create Account' }}</h2>
+    <p class="auth-subtitle">
+      {{ isLogin ? 'Sign in to access your history' : 'Sign up to synchronize your data' }}
+    </p>
+
+    <!-- Google Button -->
+    <div style="display:flex; justify-content:center; margin-bottom: 1rem;">
+      <div id="google-btn-container"></div>
+    </div>
+
+    <div class="divider"><span>OR</span></div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">@</span>
+          <input type="text" class="form-input" [(ngModel)]="username" name="username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔑</span>
+          <input type="password" class="form-input" [(ngModel)]="password" name="password" required>
+        </div>
+      </div>
+
+      <div class="alert alert-error" *ngIf="error" [class.show]="error">
+        <span class="alert-icon">❌</span> {{ error }}
+      </div>
+      
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Please wait...' : (isLogin ? 'Log In' : 'Sign Up') }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+      <a href="javascript:void(0)" (click)="toggleMode()">{{ isLogin ? 'Sign Up' : 'Log In' }}</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Lock files (choose which ones your project uses)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+.vscode-test/
+
+# Miscellaneous
+/.angular/cache
+/.angular/
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+environment.development.ts
+environment.production.ts
+.env
+.env.local
+.env.*.local
+
+# OS files
+.AppleDouble
+.LSOverride
+
+# JetBrains IDEs
+*.iml
+*.iws
+*.ipr
+*.log
+
+# Sublime Text
+*.sublime-project
+
+# Production build files
+dist/
+build/
+
+# Testing
+/coverage/
+.nyc_output/
+*.lcov
+
+# Dependencies
+npm-shrinkwrap.json
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Temporary files
+.temp/
+.tmp/
+*.tmp
+
+# Editor directories and files
+.vscode/
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Angular specific
+.angular/
+src/**/*.spec.ts

@@ -1,0 +1,24 @@
+<nav class="topnav">
+  <a href="/" class="topnav-brand" routerLink="/">
+    <div class="topnav-brand-icon">📏</div>
+    <span class="topnav-brand-text">QuantiMeasure</span>
+  </a>
+
+  <div class="topnav-center">
+    <a routerLink="/" class="nav-link">Dashboard</a>
+    <button class="nav-link btn-history" (click)="openHistory()">View History</button>
+  </div>
+
+  <div class="topnav-right">
+    <div class="user-pill" *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loginBtn">
+      <div class="user-avatar">{{ (authService.currentUser$ | async)?.username?.charAt(0) || 'U' }}</div>
+      <span class="user-name">{{ (authService.currentUser$ | async)?.username }}</span>
+      <button class="btn-logout" (click)="logout()">Log Out &times;</button>
+    </div>
+    <ng-template #loginBtn>
+      <button class="btn btn-primary" style="padding: 0.4rem 1rem;" (click)="openAuthModal()">Log In</button>
+    </ng-template>
+  </div>
+</nav>
+
+<app-auth-modal *ngIf="showAuthModal" (close)="showAuthModal = false"></app-auth-modal>

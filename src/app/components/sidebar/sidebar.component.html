@@ -1,0 +1,12 @@
+<aside class="sidebar">
+  <div class="sidebar-title">Measurement Type</div>
+  
+  <button 
+    *ngFor="let type of measurementTypes" 
+    class="type-btn" 
+    [class.active]="activeType === type.name"
+    (click)="selectType(type.name)">
+    <span class="type-icon">{{ type.icon }}</span>
+    {{ type.name }}
+  </button>
+</aside>
