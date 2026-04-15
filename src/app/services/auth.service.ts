@@ -11,7 +11,7 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:5000/api/auth';
+  private readonly API_URL = 'https://quantitymeasurementapp-ock1.onrender.com/api/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
   public isLoggedIn$ = this.currentUser$.pipe(map(user => !!user));

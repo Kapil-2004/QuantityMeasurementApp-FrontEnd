@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class QuantityService {
-  private readonly API_URL = 'http://localhost:5000/api/quantities';
+  private readonly API_URL = 'https://quantitymeasurementapp-ock1.onrender.com/api/quantities';
 
   constructor(private http: HttpClient) {}
 
