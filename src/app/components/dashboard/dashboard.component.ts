@@ -41,6 +41,8 @@ export class DashboardComponent implements OnInit {
 
   history: any[] = [];
 
+  isLoggedIn = false;
+
   constructor(
     private appState: AppStateService,
     private quantityService: QuantityService,
@@ -48,6 +50,16 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Track login state
+    this.authService.isLoggedIn$.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn;
+      if (loggedIn) {
+        this.loadRemoteHistory();
+      } else {
+        this.history = []; // Clear history when logged out
+      }
+    });
+
     this.appState.activeType$.subscribe(type => {
       this.activeType = type;
       this.units = UNITS[type] || [];
@@ -61,10 +73,6 @@ export class DashboardComponent implements OnInit {
       
       this.updateActionAvailability();
     });
-
-    if (this.authService.token) {
-      this.loadRemoteHistory();
-    }
   }
 
   updateActionAvailability() {
@@ -111,7 +119,9 @@ export class DashboardComponent implements OnInit {
       next: (res: any) => {
         this.loading = false;
         this.handleResult(res);
-        this.pushLocalHistory(res);
+        if (this.isLoggedIn) {
+          this.pushLocalHistory(res);
+        }
       },
       error: (err) => {
         this.loading = false;

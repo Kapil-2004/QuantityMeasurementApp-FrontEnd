@@ -75,8 +75,8 @@
     </form>
   </div>
 
-  <!-- Right Column: History -->
-  <div class="history-panel glass-card">
+  <!-- Right Column: History (only when logged in) -->
+  <div class="history-panel glass-card" *ngIf="isLoggedIn">
     <div class="history-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
       <h3 class="history-title" style="font-size: 1rem; font-weight: 700;">Recent History</h3>
       <button class="btn btn-history-sync" style="background: transparent; border: 1px solid var(--clr-border); padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: var(--radius-sm); color: var(--clr-text-dim); cursor: pointer;" (click)="loadRemoteHistory()">Sync ☁️</button>
@@ -102,5 +102,12 @@
         <p>No operations yet.</p>
       </div>
     </ng-template>
+  </div>
+
+  <!-- Right Column: Login prompt (when not logged in) -->
+  <div class="history-panel glass-card" *ngIf="!isLoggedIn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1rem; padding: 2rem;">
+    <div style="font-size: 3rem; opacity: 0.4;">🔒</div>
+    <h3 style="font-size: 1rem; font-weight: 700; color: var(--clr-text);">History Locked</h3>
+    <p style="font-size: 0.85rem; color: var(--clr-text-dim); max-width: 200px; line-height: 1.6;">Log in to save and view your calculation history across sessions.</p>
   </div>
 </div>
